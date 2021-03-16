@@ -18,9 +18,19 @@ exports.checkAccountPayload = (req, res, next) => {
   }
 };
 
-exports.checkAccountNameUnique = async (req, res, next) => {
+exports.checkAccountNameUnique = (req, res, next) => {
   // DO YOUR MAGIC
-}
+  const { name } = req.body;
+  Account.getByName(name)
+  .then(check => {
+    if (check) {
+      res.status(400).json({message: 'that name is taken'})
+    } else {
+      next()
+    }
+  })
+  .catch(err => next(err));
+};
 
 exports.checkAccountId =  (req, res, next) => {
   // DO YOUR MAGIC
