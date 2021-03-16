@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { checkAccountId } = require('./accounts-middleware');
+const { checkAccountId, checkAccountPayload } = require('./accounts-middleware');
 const Account = require('./accounts-model');
 
 router.get('/', async (req, res, next) => {
@@ -16,7 +16,7 @@ router.get('/:id', checkAccountId, (req, res, next) => {
   .catch(err => next(err));
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAccountPayload, (req, res, next) => {
   // DO YOUR MAGIC
   const newAccount = req.body;
   Account.create({...newAccount, name: newAccount.name.trim()})
@@ -42,6 +42,6 @@ router.use((err, req, res, next) => { // eslint-disable-line
     message: 'something went wrong inside the accounts router',
     errMessage: err.message,
   })
-})
+});
 
 module.exports = router;
