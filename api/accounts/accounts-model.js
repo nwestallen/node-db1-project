@@ -29,7 +29,10 @@ const updateById = (id, account) => {
   // DO YOUR MAGIC
   return db('accounts')
   .where('id', id)
-  .update(account);
+  .update(account)
+  .then(() => {
+    return getById(id);
+  });
 };
 
 const deleteById = async id => {
